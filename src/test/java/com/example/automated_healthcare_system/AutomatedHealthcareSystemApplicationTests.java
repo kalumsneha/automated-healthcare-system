@@ -8,6 +8,7 @@ class AutomatedHealthcareSystemApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//test
 	}
 
 }
