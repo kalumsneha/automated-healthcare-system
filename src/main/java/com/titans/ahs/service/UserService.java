@@ -1,29 +1,22 @@
 package com.titans.ahs.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.titans.ahs.model.User;
-import com.titans.ahs.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
-@Service
-@Slf4j
-public class UserService {
+public interface UserService extends UserDetailsService {
+    User createUser(User user) throws JsonProcessingException;
 
-    @Autowired
-    private UserRepository userRepository;
+    List<User> getUsers();
 
-    public User createUser(User user) throws JsonProcessingException {
-        log.info("Creating User: {}", new ObjectMapper().writeValueAsString(user));
-        return this.userRepository.save(user);
-    }
+    Optional<User> getUserByUsername(String username);
 
-    public List<User> getUsers(){
-        log.info("Fetching Users");
-        return this.userRepository.findAll();
-    }
+    User updateUser(String username, User user);
+
+    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

@@ -1,0 +1,27 @@
+server:
+  servlet:
+    context-path: /ahs
+  port: 5050
+
+spring:
+  application:
+    name: automated-healthcare-system
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        #type:
+        #  json_format_mapper: com.titans.ahs.formatter.CustomJacksonJsonFormatMapper
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/automated_health_system
+    username: ahs_admin
+    password: Password12
+
+
+
+
+
