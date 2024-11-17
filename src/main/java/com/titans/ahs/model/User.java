@@ -53,9 +53,6 @@ public class User extends BaseEntity {
     @Email
     private String email;
 
-    @Column(name = "profile_pic")
-    private String profilePic;
-
     @Column(name = "role", nullable = false)
     private Role role;
 
