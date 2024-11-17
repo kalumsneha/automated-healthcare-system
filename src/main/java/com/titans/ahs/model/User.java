@@ -41,9 +41,9 @@ public class User extends BaseEntity {
     @NotEmpty(message = "lastName is required")
     private String lastName;
 
-    @Column(name = "date_of_birth", nullable = false)
+    /*@Column(name = "date_of_birth", nullable = false)
     @NotNull(message = "dateOfBirth is required")
-    private LocalDate dateOfBirth;
+    private LocalDate dateOfBirth;*/
 
     @Column(name = "phone_number", nullable = false)
     @NotEmpty(message = "phoneNumber is required")
