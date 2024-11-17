@@ -19,6 +19,6 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Load initial data into the database
         if(userService.getUserByUsername("mfernando").isEmpty())
-            userService.createUser(new User("mfernando", "password1", "Mikalum", "Fernando", LocalDate.of(1960, 1, 18), "9057810000", "mfernando@gmail.com", null, Role.ADMIN));
+            userService.createUser(new User("mfernando", "password1", "Mikalum", "Fernando", LocalDate.of(1960, 1, 18), "9057810000", "mfernando@gmail.com", Role.ADMIN));
     }
 }
