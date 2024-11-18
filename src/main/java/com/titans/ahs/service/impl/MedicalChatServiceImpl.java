@@ -3,6 +3,7 @@ package com.titans.ahs.service.impl;
 import com.titans.ahs.exception.type.BadRequestException;
 import com.titans.ahs.model.MedicalChat;
 import com.titans.ahs.model.Page;
+import com.titans.ahs.model.dto.MedicalChatDate;
 import com.titans.ahs.repository.MedicalChatRepository;
 import com.titans.ahs.service.MedicalChatService;
 import io.micrometer.common.util.StringUtils;
@@ -76,5 +77,9 @@ public class MedicalChatServiceImpl implements MedicalChatService {
             count = this.medicalChatRepository.countByUserIdAndCreatedDateTimeBetween(userId, createdDateTimeStart, createdDateTimeEnd);
         }
         return new Page<>(medicalChats, count);
+    }
+
+    public List<MedicalChatDate> getDistinctDatesFromMedicalChats(String userId){
+         return this.medicalChatRepository.findAllByUserIdGroupByDates(userId);
     }
 }
