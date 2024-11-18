@@ -33,9 +33,11 @@ public class MedicalChatController {
     public Page<MedicalChat> getMedicalChats(
             @PathVariable String userId,
             @RequestParam(required = false) Integer pageNumber,
-            @RequestParam(required = false) Integer pageSize) throws JsonProcessingException {
-        log.info("Fetching Medical Chats By User ID: {}", userId);
-        return this.medicalChatService.getMedicalChats(userId, pageNumber, pageSize);
+            @RequestParam(required = false) Integer pageSize,
+            @RequestParam(required = false) String createdDateTimeStart,
+            @RequestParam(required = false) String createdDateTimeEnd) throws JsonProcessingException {
+        log.info("Fetching Medical Chats By User ID: {}, Page Number: {}, Page Size: {}, Created Date Time Start: {}, Created Date Time End: {}", userId, pageNumber, pageSize, createdDateTimeStart, createdDateTimeEnd);
+        return this.medicalChatService.getMedicalChats(userId, pageNumber, pageSize, createdDateTimeStart, createdDateTimeEnd);
     }
 
 }
