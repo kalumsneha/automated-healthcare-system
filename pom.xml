@@ -113,6 +113,22 @@
 			<artifactId>spring-ai-openai-spring-boot-starter</artifactId>
 		</dependency>-->
 
+		<!--<dependency>
+			<groupId>org.tensorflow</groupId>
+			<artifactId>tensorflow</artifactId>
+			<version>2.4.1</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.djl.tensorflow</groupId>
+			<artifactId>djl-tensorflow-engine</artifactId>
+			<version>0.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.huggingface</groupId>
+			<artifactId>transformers</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+-->
 	</dependencies>
 
 	<build>
