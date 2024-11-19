@@ -30,7 +30,7 @@ spring:
 openai:
   model: gpt-3.5-turbo
   api.url: https://api.openai.com/v1/chat/completions
-  api.key: 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
+  api.key: some-key
   
   
 
