@@ -1,12 +1,19 @@
 package com.titans.ahs.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.titans.ahs.exception.type.BadRequestException;
 import com.titans.ahs.model.MedicalChat;
 import com.titans.ahs.model.Page;
 import com.titans.ahs.model.dto.MedicalChatDate;
+import com.titans.ahs.model.llama.LlamaMessage;
+import com.titans.ahs.model.llama.LlamaResponse;
 import com.titans.ahs.repository.MedicalChatRepository;
 import com.titans.ahs.service.MedicalChatService;
+import com.titans.ahs.service.chatgpt.ChatService;
+import com.titans.ahs.service.llama.LlamaAiService;
 import io.micrometer.common.util.StringUtils;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -27,8 +34,33 @@ public class MedicalChatServiceImpl implements MedicalChatService {
     @Autowired
     private MedicalChatRepository medicalChatRepository;
 
+    @Autowired
+    private ChatService chatService;
+
+    @Autowired
+    private LlamaAiService llamaAiService;
+
     @Override
-    public MedicalChat createMedicalChat(MedicalChat medicalChat) {
+    @Transactional
+    public MedicalChat createMedicalChat(MedicalChat medicalChat) throws JsonProcessingException {
+        medicalChat.setReferenceNumber(UUID.randomUUID().toString());
+        medicalChat.setCreatedDateTime(LocalDateTime.now());
+
+        this.medicalChatRepository.save(medicalChat);
+
+        return this.createMedicalChatResponse(medicalChat);
+    }
+
+    public MedicalChat createMedicalChatResponse(MedicalChat medicalChat) throws JsonProcessingException {
+
+        //Chat GPT 3.5 Open AI
+        //String chatResponse = this.chatService.chat(medicalChat.getChatMessage());
+
+        //Ollama
+        medicalChat.getChatMessage().concat(" .Make it brief and highlight some remedies. ");
+        LlamaResponse chatResponse = this.llamaAiService.generateMessage(medicalChat.getChatMessage());
+        LlamaMessage responseMessage = new ObjectMapper().readValue(chatResponse.getMessage(), LlamaMessage.class);
+        medicalChat.setChatMessage(StringUtils.isEmpty(responseMessage.getResponse()) ? "No Response. Please try again.": responseMessage.getResponse());
         medicalChat.setReferenceNumber(UUID.randomUUID().toString());
         medicalChat.setCreatedDateTime(LocalDateTime.now());
         return this.medicalChatRepository.save(medicalChat);
