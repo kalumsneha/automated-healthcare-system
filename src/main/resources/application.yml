@@ -30,7 +30,7 @@ spring:
 openai:
   model: gpt-3.5-turbo
   api.url: https://api.openai.com/v1/chat/completions
-  api.key: some-key
+  #api.key: some-key
   
   
 
