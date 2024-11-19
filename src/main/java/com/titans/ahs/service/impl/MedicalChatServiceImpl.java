@@ -2,6 +2,7 @@ package com.titans.ahs.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.titans.ahs.exception.type.BadRequestException;
 import com.titans.ahs.model.MedicalChat;
 import com.titans.ahs.model.Page;
@@ -15,6 +16,7 @@ import com.titans.ahs.service.llama.LlamaAiService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,7 +48,7 @@ public class MedicalChatServiceImpl implements MedicalChatService {
         medicalChat.setReferenceNumber(UUID.randomUUID().toString());
         medicalChat.setCreatedDateTime(LocalDateTime.now());
 
-        this.medicalChatRepository.save(medicalChat);
+        //this.medicalChatRepository.save(medicalChat);
 
         return this.createMedicalChatResponse(medicalChat);
     }
@@ -57,13 +59,16 @@ public class MedicalChatServiceImpl implements MedicalChatService {
         //String chatResponse = this.chatService.chat(medicalChat.getChatMessage());
 
         //Ollama
-        medicalChat.getChatMessage().concat(" .Make it brief and highlight some remedies. ");
-        LlamaResponse chatResponse = this.llamaAiService.generateMessage(medicalChat.getChatMessage());
+        MedicalChat response = new MedicalChat();
+        BeanUtils.copyProperties(medicalChat, response);
+        response.getChatMessage().concat(" .Make it brief and highlight some remedies. ");
+        LlamaResponse chatResponse = this.llamaAiService.generateMessage(response.getChatMessage());
         LlamaMessage responseMessage = new ObjectMapper().readValue(chatResponse.getMessage(), LlamaMessage.class);
-        medicalChat.setChatMessage(StringUtils.isEmpty(responseMessage.getResponse()) ? "No Response. Please try again.": responseMessage.getResponse());
-        medicalChat.setReferenceNumber(UUID.randomUUID().toString());
-        medicalChat.setCreatedDateTime(LocalDateTime.now());
-        return this.medicalChatRepository.save(medicalChat);
+        response.setChatMessage(StringUtils.isEmpty(responseMessage.getResponse()) ? "No Response. Please try again.": responseMessage.getResponse());
+        response.setReferenceNumber(UUID.randomUUID().toString());
+        response.setCreatedDateTime(LocalDateTime.now());
+        this.medicalChatRepository.saveAll(List.of(medicalChat, response));
+        return response;
     }
 
     @Override
