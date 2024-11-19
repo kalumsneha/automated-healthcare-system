@@ -34,9 +34,12 @@ public class MedicalChat extends BaseEntity {
     @Column(name = "chat_date_time", nullable = false)
     private LocalDateTime createdDateTime;
 
-    @Column(name = "chat_message", nullable = false)
+    //@Column(name = "chat_message", nullable = false)
+    @Column(name = "chat_message", nullable = false, columnDefinition = "TEXT")
     @NotEmpty(message = "chatMessage is required")
     private String chatMessage;
+
+
 
 
 }
